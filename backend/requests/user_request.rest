@@ -1,0 +1,22 @@
+GET http://localhost:3001/api/users/
+
+###
+POST http://localhost:3001/api/users/ 
+Content-Type: application/json 
+#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxlYW4iLCJpZCI6IjY4MTY4ZDlkMTMwZTBlMWMwNzllNjg4YiIsImlhdCI6MTc0NjM2NzczMywiZXhwIjoxNzQ2MzcxMzMzfQ.XMAdUij-dNKw9F4L3nLgNCytnh0ehjojGBK5-9njJ9g
+
+{
+    "name": "Leandro",
+    "username": "lean",
+    "password": "Zl181069"
+}
+
+###
+PUT http://localhost:3001/api/users/6818e7e44dcd95ff6bcda76f 
+Content-Type: application/json 
+
+{
+    "name": "Leandro",
+    "username": "lean",
+    "password": "Zl181069"
+}

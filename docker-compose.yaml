@@ -1,0 +1,27 @@
+services:
+  frontend:
+    image: node:23-alpine3.20
+    #command: sh -c "npm install axios && npm install -g json-server && npm install && npm run dev -- --host"
+    command: sh -c "npm install && npm run dev -- --host"
+    ports:
+      - 5173:5173
+    volumes:
+      - ./frontend:/app
+      - node_modules_frontend:/app/node_modules
+    working_dir: /app
+    container_name: frontend
+
+  backend:
+    image: node:23-alpine3.20
+    command: sh -c "npm install && npm start"
+    ports:
+      - 3001:3001
+    volumes:
+      - ./backend:/app
+      - node_modules_backend:/app/node_modules
+    working_dir: /app
+    container_name: backend
+
+volumes:
+  node_modules_frontend:
+  node_modules_backend:
