@@ -10,6 +10,7 @@ import taskService from './services/tasks'
 import loginService from './services/login'
 import clientService from './services/clients'
 import { fetchUserData, isTokenExpired } from './utils/aux.js'
+import Togglable from './components/Toggable'
 
 
 const App = () => {
@@ -78,7 +79,14 @@ const App = () => {
     <div>
       <Notification message={message}/>
       {((user === null) || isTokenExpired(user.exp)) ?
-        <Login handleLogin={handleLogin} setUsername={setUsername} setPassword={setPassword} username={username} password={password} /> :
+        <div>
+          <h1>Task App</h1>
+          <Togglable buttonLabel='Login'>
+            <Login handleLogin={handleLogin} setUsername={setUsername} setPassword={setPassword} username={username} password={password} />
+          </Togglable>
+        </div>
+        
+           :
         <div>
           <OptionsMenu setuser={setUser} setmessage={setMessage}/>
           <Client clients={clientList} setclientlist={setClientList} setMessage={setMessage}/>

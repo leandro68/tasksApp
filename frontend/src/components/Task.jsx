@@ -95,6 +95,7 @@ const Task = ({task, setMessage, user, setWaitingTasks, setStartedTasks, setClie
         }
     }
 
+
     return (
         <div>
             <hr/>

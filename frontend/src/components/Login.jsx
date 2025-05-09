@@ -1,7 +1,6 @@
 const Login = ({username, password, handleLogin, setUsername, setPassword}) => {
     return (
         <>
-            <h1>Tasks App Login</h1>
             <form onSubmit={handleLogin}>
                 <div>
                 username
