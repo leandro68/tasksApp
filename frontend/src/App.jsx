@@ -7,8 +7,6 @@ import Client from './components/Client'
 import Login from './components/Login'
 import OptionsMenu from './components/OptionsMenu'
 import taskService from './services/tasks'
-import loginService from './services/login'
-import clientService from './services/clients'
 import { fetchUserData, isTokenExpired } from './utils/aux.js'
 import Togglable from './components/Toggable'
 
@@ -24,16 +22,6 @@ const App = () => {
   
   useEffect(() => {
     fetchUserData(user, setWaitingTasks, setStartedTasks, setClientList);
-
-    /* if ((user !== null) && !isTokenExpired(user.exp)) {   
-      taskService.setToken(user.token)
-      let state='WAITING'
-      taskService.getByState({state}).then(tasks => setWaitingTasks(tasks))
-      state='STARTED'
-      taskService.getByState({state}).then(tasks => setStartedTasks(tasks))
-      clientService.setToken(user.token)
-      clientService.getAll().then(clients => setClientList(clients))
-    }  */
   }, [user])  
 
   useEffect(() => {
@@ -45,36 +33,6 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    
-    try {
-      const userLogged = await loginService.login({
-        username, password,
-      })
-      window.localStorage.setItem(
-        'loggedTasksAppUser', JSON.stringify(userLogged)
-      ) 
-      setUser(userLogged)
-      setUsername('')
-      setPassword('')
-      
-      setMessage(`${userLogged.name} logged in`)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
-    } catch (exception) {
-      setMessage('Wrong credentials')
-      console.log(exception)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
-    }
-  }
-
-  
-
-
   return (
     <div>
       <Notification message={message}/>
@@ -82,7 +40,8 @@ const App = () => {
         <div>
           <h1>Task App</h1>
           <Togglable buttonLabel='Login'>
-            <Login handleLogin={handleLogin} setUsername={setUsername} setPassword={setPassword} username={username} password={password} />
+            <Login setUsername={setUsername} setPassword={setPassword} username={username} 
+                  password={password} setUser={setUser} setMessage={setMessage}/>
           </Togglable>
         </div>
         
