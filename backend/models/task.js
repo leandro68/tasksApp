@@ -1,19 +1,22 @@
 const mongoose = require('mongoose')
 
 const taskSchema = new mongoose.Schema({
-    /* user: {
+    inputDate: {
+        type: Date,
+        required: true
+    },
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-      },*/
+      },
     client: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Client'
       }, 
     category: {
         type: String,
-        required: true,
-        enum: ["REMOTO", "PRESENCIAL"]
-
+        enum: ["REMOTO", "ON PREMISE", null],
+        default: null
     }, 
     goTrip: {
         type: Date,
@@ -21,12 +24,12 @@ const taskSchema = new mongoose.Schema({
         validate: {
             validator: function(value) {
                 // Si endWork es null, backTrip debe ser null
-                if ( this.category === "PRESENCIAL") {
+                if ( this.category !== "ON PREMISE" && value !== null ) {
                     return false;
                 }
                 return true;
             },
-            message: "goTrip solo puede tener una fecha category es PRESENCIAL"
+            message: "goTrip solo puede tener una fecha si category es ON PREMISE"
         }
     },
     startWork: {
@@ -35,12 +38,12 @@ const taskSchema = new mongoose.Schema({
         validate: {
             validator: function(value) {
                 // Si gotrip tiene una fecha, debe ser menor a startwork
-                if (this.goTrip !== null && value !== null ) {
+                if (this.goTrip !== null && value !== null) {
                     return this.goTrip < value;
                 }
-                //si category es PRESENCIAL gotrip no puede ser null
-                if (this.category === "PRESENCIAL" && value !== null ) {
-                    return this.goTrip < value;
+                //si category es ON PREMISE gotrip no puede ser null
+                if (this.category !== "ON PREMISE" && value !== null ) {
+                    return false;
                 }
                 return true;
             },
@@ -72,7 +75,7 @@ const taskSchema = new mongoose.Schema({
         validate: {
             validator: function(value) {
                 // Si endWork es null, backTrip debe ser null
-                if (this.endWork === null && value !== null && this.category === "PRESENCIAL") {
+                if (this.endWork === null && value !== null && this.category === "ON PREMISE") {
                     return false;
                 }
                 // Si endWork tiene una fecha, debe ser menor a backTrip
@@ -81,7 +84,7 @@ const taskSchema = new mongoose.Schema({
                 }
                 return true;
             },
-            message: "backTrip solo puede tener una fecha si endWork tiene una fecha anterior a endWork  y si category es PRESENCIAL"
+            message: "backTrip solo puede tener una fecha si endWork tiene una fecha anterior a endWork  y si category es ON PREMISE"
         }
 
     },
@@ -100,9 +103,9 @@ const taskSchema = new mongoose.Schema({
       validate: {
         validator: function(value) {
             // Solo valida si startWork no es null
-            return value === null || this.category === "PRESENCIAL";
+            return value === null || this.category === "ON PREMISE";
         },
-        message: "transport solo puede ser diferente a null si category es PRESENCIAL"
+        message: "transport solo puede ser diferente a null si category es ON PREMISE"
     }
     },
     tripCost: {
@@ -117,6 +120,11 @@ const taskSchema = new mongoose.Schema({
         }
 
     },
+    state: {
+        type: String,
+        default: 'WAITING',
+        enum: ['WAITING','STARTED','FINISHED']
+    }
     })
 
 taskSchema.set('toJSON', {
@@ -127,4 +135,6 @@ taskSchema.set('toJSON', {
     }
 })
 
-module.exports = mongoose.model('task', taskSchema)
+const Task = mongoose.model('Task', taskSchema)
+
+module.exports = Task

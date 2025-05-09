@@ -1,0 +1,42 @@
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+const loginRouter = require('express').Router()
+const User = require('../models/user')
+
+loginRouter.post('/', async (request, response) => {
+  const { username, password } = request.body
+
+  const user = await User.findOne({ username })
+  const passwordCorrect = user === null
+    ? false
+    : await bcrypt.compare(password, user.passwordHash)
+
+  if (!(user && passwordCorrect)) {
+    return response.status(401).json({
+      error: 'invalid username or password'
+    })
+  }
+
+  const userForToken = {
+    username: user.username,
+    id: user._id,
+  }
+
+  // el token expira in 60*60 segundos, eso es, en una hora
+  const token = jwt.sign(
+    userForToken, 
+    process.env.SECRET,
+    { expiresIn: 60*60 }
+  )
+
+  const decodedToken = jwt.decode(token); // Decodifica sin validar
+  const expirationTime = decodedToken.exp; // Tiempo de expiración (UNIX timestamp)
+
+
+
+  response
+    .status(200)
+    .send({ token, exp: expirationTime, username: user.username, name: user.name })
+})
+
+module.exports = loginRouter

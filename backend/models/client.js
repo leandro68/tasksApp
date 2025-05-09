@@ -9,13 +9,7 @@ const clientSchema = new mongoose.Schema({
     subscriber: {
         type: Boolean,
         required: true
-    },
-    tasks: [
-            {
-              type: mongoose.Schema.Types.ObjectId,
-              ref: 'Task'
-            }
-    ],
+    }
 })
 
 clientSchema.set('toJSON', {
@@ -26,4 +20,6 @@ clientSchema.set('toJSON', {
     }
 })
 
-module.exports = mongoose.model('client', clientSchema)
+const Client = mongoose.model('Client', clientSchema)
+
+module.exports = Client

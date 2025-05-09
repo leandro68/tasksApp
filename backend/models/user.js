@@ -14,13 +14,7 @@ const userSchema = new mongoose.Schema({
     passwordHash: {
         type: String,
         required: true
-    },
-    tasks: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Task'
-        }
-    ],
+    }
 
 })
 
@@ -29,7 +23,11 @@ userSchema.set('toJSON', {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
         delete returnedObject.__v
+        // el passwordHash no debe mostrarse
+        delete returnedObject.passwordHash
     }
 })
 
-module.exports = mongoose.model('user', userSchema)
+const User = mongoose.model('User', userSchema)
+
+module.exports = User

@@ -1,6 +1,5 @@
 const clientsRouter = require('express').Router()
 const Client = require('../models/client')
-const User = require('../models/user')
 
 clientsRouter.get('/', async (request, response) => {
   const clients = await Client.find({})
@@ -9,19 +8,14 @@ clientsRouter.get('/', async (request, response) => {
 
 clientsRouter.post('/', async (request, response) => {
   const body = request.body
-  const user = await User.findById(body.userId)
-
+  
   const client = new Client({
     name: body.name,
-    subscriber: body.subscriber,
-    user: user.id
+    subscriber: body.subscriber
   })  
 
   const savedClient = await client.save()
 
-  //actualiza en el usuario la lista de clientes creados por el usuario
-  user.clients = user.clients.concat(savedClient._id)
-  await user.save()
   response.status(201).json(savedClient)
 })
 
