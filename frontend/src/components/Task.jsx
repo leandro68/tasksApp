@@ -9,22 +9,24 @@
  */
 //import { fetchUserData, isTokenExpired } from './utils/aux.js'
 import taskService from '../services/tasks'
-import { fetchUserData } from '../utils/aux.js'
+import { fetchWaitingTasksData, fetchStartedTasksData } from '../utils/aux.js'
 
 const Task = ({task, setMessage, user, setWaitingTasks, setStartedTasks, setClientList}) => {
 
+    //console.log('Task: user:',user)
+    
     const formatDate = (date) => {
         const formattedDate = new Date(date);
         return formattedDate.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: '2-digit' });
     };
 
-
+    //console.log('Task to modify:',task)
     const handleStart= async (event) => {
         event.preventDefault()
         const taskObject = {
             inputDate: task.inputDate,
-            user: task.user,
-            client: task.clientId,
+            userId: task.user.id,
+            clientId: task.client.id,
             endWork: task.endWork,
             backTrip: task.backTrip,
             order: task.order, 
@@ -48,14 +50,22 @@ const Task = ({task, setMessage, user, setWaitingTasks, setStartedTasks, setClie
                     taskObject.goTrip = Date.now()
                     break
                 }
-           
+            case 'LOGISTIC':
+                {
+                    taskObject.category = 'LOGISTIC'
+                    taskObject.startWork = task.startWork
+                    taskObject.goTrip = Date.now()
+                    break
+                } 
         }
         
         try {
             const id= task.id
             const returnedTask = await taskService.update(id, taskObject);
-            console.log('returnedTask',returnedTask)
+            //console.log('returnedTask',returnedTask)
             setMessage(`task successfully modified`);
+            fetchWaitingTasksData(user, setWaitingTasks)
+            fetchStartedTasksData(user, setStartedTasks)
             setTimeout(() => {
                 setMessage(null);
             }, 5000);
@@ -73,12 +83,13 @@ const Task = ({task, setMessage, user, setWaitingTasks, setStartedTasks, setClie
     const handleDelete = async () => {
         let confirmation = confirm("¿Estás seguro de que quieres borrar esta tarea?");
         if (confirmation) {
-            console.log("Elemento borrado.");
+            //console.log("Elemento borrado.");
             try {
                 const id= task.id
                 await taskService.erase(id);
                 setMessage(`task successfully deleted`);
-                fetchUserData(user, setWaitingTasks, setStartedTasks, setClientList)
+                fetchWaitingTasksData(user, setWaitingTasks)
+                fetchStartedTasksData(user, setStartedTasks)
                 setTimeout(() => {
                     setMessage(null);
                 }, 5000);
@@ -97,7 +108,7 @@ const Task = ({task, setMessage, user, setWaitingTasks, setStartedTasks, setClie
 
 
     return (
-        <div>
+        <div className="task">
             <hr/>
             <div>
                 {formatDate(task.inputDate)} - {task.client.name}
@@ -109,14 +120,12 @@ const Task = ({task, setMessage, user, setWaitingTasks, setStartedTasks, setClie
                 { (task.state === 'WAITING') ?
                    <div>
                         <button className="outOfMenuButton" onClick={handleStart} value={'REMOTE'}>Start Remote</button>
-                        <button className="outOfMenuButton" onClick={handleStart} value={'ON PREMISE'}>Start Trip</button>
+                        <button className="outOfMenuButton" onClick={handleStart} value={'ON PREMISE'}>Start On Premise</button>
+                        <button className="outOfMenuButton" onClick={handleStart} value={'LOGISTIC'}>Start Logistic</button>
                         <button className="outOfMenuButton" onClick={handleDelete} >Delete task</button>
                    </div> :
                    <></>     
                 } 
-                
-            
-            <hr/>
         </div>
         
     )

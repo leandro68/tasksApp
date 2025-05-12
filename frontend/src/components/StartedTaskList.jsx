@@ -1,7 +1,6 @@
 import Task from "./Task"
-import { fetchUserData } from '../utils/aux.js'
 
-const StartedTaskList = ({taskList, setMessage}) => {
+const StartedTaskList = ({taskList, setMessage, user, setWaitingTasks, setStartedTasks, setClientList}) => {
     
     return (
       <div>
@@ -12,6 +11,10 @@ const StartedTaskList = ({taskList, setMessage}) => {
               key={task.id}
               task={task} 
               setMessage={setMessage}
+              user={user} 
+              setWaitingTasks={setWaitingTasks} 
+              setStartedTasks={setStartedTasks} 
+              setClientList={setClientList}
               //toggleImportance={() => toggleImportanceOf(note.id)}
             />
           )} 

@@ -7,17 +7,31 @@ export const isTokenExpired = (exp) => {
     return exp < currentTime;
 }
 
-export const fetchUserData = (user, setWaitingTasks, setStartedTasks, setClientList) => {
+export const fetchClientsData = (user, setClientList) => {
   if (user !== null && !isTokenExpired(user.exp)) {
     taskService.setToken(user.token);
-    
-    taskService.getByState({ state: 'WAITING' }).then(tasks => setWaitingTasks(tasks));
-    taskService.getByState({ state: 'STARTED' }).then(tasks => setStartedTasks(tasks));
-    
+
     clientService.setToken(user.token);
     clientService.getAll().then(clients => setClientList(clients));
   }
 };
+
+export const fetchWaitingTasksData = (user, setWaitingTasks, setStartedTasks, setClientList) => {
+  if (user !== null && !isTokenExpired(user.exp)) {
+    taskService.setToken(user.token);
+    
+    taskService.getByState({ state: 'WAITING' }).then(tasks => setWaitingTasks(tasks));
+  }
+};
+
+export const fetchStartedTasksData = (user, setStartedTasks) => {
+  if (user !== null && !isTokenExpired(user.exp)) {
+    taskService.setToken(user.token);
+    
+    taskService.getByState({ state: 'STARTED' }).then(tasks => setStartedTasks(tasks));
+  }
+};
+
 
 
 

@@ -20,7 +20,7 @@ const getByState = async ({state}) => {
     headers: { Authorization: token },
   }
   const response = await axios.get(`${baseUrl}/state/${state}`, config)
-  console.log('response:',response.data)
+  //console.log('response:',response.data)
   return response.data
 }
 
@@ -28,8 +28,8 @@ const create = async newObject => {
   const config = {
     headers: { Authorization: token },
   }
-  console.log('newObject',newObject)
-  console.log('config',config)
+  //console.log('newObject',newObject)
+  //console.log('config',config)
   const response = await axios.post(baseUrl, newObject, config)
   return response.data
 }
@@ -38,8 +38,10 @@ const update = async (id, taskObject) => {
   const config = {
     headers: { Authorization: token },
   }
-  const request = await axios.put(`${baseUrl}/${id}`, taskObject, config)
-  return request.then(response => response.data)
+  //console.log('taskObject',taskObject)
+  //console.log('config',config)
+  const response = await axios.put(`${baseUrl}/${id}`, taskObject, config)
+  return response.data
 }
 
 const erase = async (id) => {

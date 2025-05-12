@@ -1,7 +1,7 @@
 import Task from "./Task"
-import { fetchUserData } from '../utils/aux.js'
 
 const WaitingTaskList = ({taskList, setMessage, user, setWaitingTasks, setStartedTasks, setClientList}) => {
+
     return (
         <div>
         <h2>Waiting Tasks</h2>

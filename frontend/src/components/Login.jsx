@@ -1,4 +1,6 @@
 import loginService from '../services/login'
+import PropTypes from 'prop-types'
+
 const Login = ({username, password, setUsername, setPassword, setUser, setMessage}) => {
     
     const handleLogin = async (event) => {
@@ -55,6 +57,15 @@ const Login = ({username, password, setUsername, setPassword, setUser, setMessag
             <hr/>
         </>
     )
+}
+
+Login.propTypes = {
+  setUser: PropTypes.func.isRequired,
+  setMessage: PropTypes.func.isRequired,
+  setUsername: PropTypes.func.isRequired,
+  setPassword: PropTypes.func.isRequired,
+  password: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired
 }
 
 export default Login

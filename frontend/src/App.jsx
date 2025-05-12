@@ -7,7 +7,7 @@ import Client from './components/Client'
 import Login from './components/Login'
 import OptionsMenu from './components/OptionsMenu'
 import taskService from './services/tasks'
-import { fetchUserData, isTokenExpired } from './utils/aux.js'
+import { fetchClientsData, fetchStartedTasksData, fetchWaitingTasksData, isTokenExpired } from './utils/aux.js'
 import Togglable from './components/Toggable'
 
 
@@ -21,7 +21,9 @@ const App = () => {
   const [clientList, setClientList] = useState([])
   
   useEffect(() => {
-    fetchUserData(user, setWaitingTasks, setStartedTasks, setClientList);
+    fetchClientsData(user, setClientList);
+    fetchWaitingTasksData(user, setWaitingTasks);
+    fetchStartedTasksData(user, setStartedTasks);
   }, [user])  
 
   useEffect(() => {
@@ -39,7 +41,7 @@ const App = () => {
       {((user === null) || isTokenExpired(user.exp)) ?
         <div>
           <h1>Task App</h1>
-          <Togglable buttonLabel='Login'>
+          <Togglable buttonLabel='Login' >
             <Login setUsername={setUsername} setPassword={setPassword} username={username} 
                   password={password} setUser={setUser} setMessage={setMessage}/>
           </Togglable>
@@ -50,7 +52,7 @@ const App = () => {
           <OptionsMenu setuser={setUser} setmessage={setMessage}/>
           <Client clients={clientList} setclientlist={setClientList} setMessage={setMessage}/>
           <NewTask clientList={clientList} setMessage={setMessage} setWaitingTasks={setWaitingTasks} setStartedTasks={setStartedTasks} user={user} setClientList={setClientList}/>
-          <StartedTaskList taskList={startedTasks} setMessage={setMessage} />
+          <StartedTaskList taskList={startedTasks} setMessage={setMessage} user={user} setWaitingTasks={setWaitingTasks} setStartedTasks={setStartedTasks} setClientList={setClientList}/>
           <WaitingTaskList taskList={waitingTasks} setMessage={setMessage} user={user} setWaitingTasks={setWaitingTasks} setStartedTasks={setStartedTasks} setClientList={setClientList}/>
         </div>
       }

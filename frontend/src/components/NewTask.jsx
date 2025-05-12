@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import taskService from '../services/tasks'
-import { fetchUserData } from '../utils/aux.js'
+import { fetchClientsData, fetchWaitingTasksData } from '../utils/aux.js'
 
 const NewTask = ({setClientList, setMessage, user, setWaitingTasks, setStartedTasks, clientList}) => {
     const [taskOrder, setTaskOrder] = useState('')
@@ -26,9 +26,10 @@ const NewTask = ({setClientList, setMessage, user, setWaitingTasks, setStartedTa
                 const returnedTask = await taskService.create(taskObject);
                 //setclientlist(clients.concat(returnedClient.name));
                 
-                console.log('returned task',returnedTask)
+                //console.log('returned task',returnedTask)
                 setMessage(`new task successfully added`);
-                fetchUserData(user, setWaitingTasks, setStartedTasks, setClientList);
+                fetchClientsData(user, setClientList)
+                fetchWaitingTasksData(user, setWaitingTasks)
                 setTaskOrder('')
                 setTaskClient('')
                 setTimeout(() => {

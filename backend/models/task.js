@@ -15,46 +15,46 @@ const taskSchema = new mongoose.Schema({
       }, 
     category: {
         type: String,
-        enum: ["REMOTO", "ON PREMISE", null],
+        enum: ["REMOTE", "ON PREMISE", "LOGISTIC", null],
         default: null
     }, 
     goTrip: {
         type: Date,
         default: null,
-        validate: {
+        /* validate: {
             validator: function(value) {
                 // Si endWork es null, backTrip debe ser null
-                if ( this.category !== "ON PREMISE" && value !== null ) {
+                if ( value !== null && this.category === "REMOTE") {
                     return false;
                 }
                 return true;
             },
-            message: "goTrip solo puede tener una fecha si category es ON PREMISE"
-        }
+            message: "goTrip solo puede tener una fecha si category es ON PREMISE O LOGISTIC"
+        } */
     },
     startWork: {
         type: Date,
         default: null,
-        validate: {
+        /* validate: {
             validator: function(value) {
                 // Si gotrip tiene una fecha, debe ser menor a startwork
                 if (this.goTrip !== null && value !== null) {
                     return this.goTrip < value;
                 }
-                //si category es ON PREMISE gotrip no puede ser null
-                if (this.category !== "ON PREMISE" && value !== null ) {
+                //si category es LOGISTIC, startWork debe ser null
+                if (this.category !== "LOGISTIC" && value !== null ) {
                     return false;
                 }
                 return true;
             },
-            message: "startWork solo puede tener una fecha si goTrip es null o anterior a endWork"
-        }
+            message: "startWork solo puede tener una fecha si goTrip es null o anterior a startWork"
+        } */
 
     },
     endWork: {
         type: Date,
         default: null,
-        validate: {
+        /* validate: {
             validator: function(value) {
                 // Si endWork es null, backTrip debe ser null
                 if (this.startWork === null && value !== null) {
@@ -67,25 +67,25 @@ const taskSchema = new mongoose.Schema({
                 return true;
             },
             message: "endWork solo puede tener una fecha si startWork tiene una fecha anterior a endWork"
-        }
+        } */
     },
     backTrip: {
         type: Date,
         default: null,
-        validate: {
+        /* validate: {
             validator: function(value) {
-                // Si endWork es null, backTrip debe ser null
-                if (this.endWork === null && value !== null && this.category === "ON PREMISE") {
-                    return false;
-                }
+                // Solo puede ser distinto de null si enwork tambien lo es o si no es REMOTE
+                //if (this.endWork === null && value !== null && this.category !== "REMOTE") {
+                //    return false;
+                //}
                 // Si endWork tiene una fecha, debe ser menor a backTrip
                 if (this.endWork !== null && value !== null) {
                     return this.endWork < value;
                 }
                 return true;
             },
-            message: "backTrip solo puede tener una fecha si endWork tiene una fecha anterior a endWork  y si category es ON PREMISE"
-        }
+            message: "backTrip solo puede tener una fecha si endWork tiene una fecha anterior a endWork  y si category es ON PREMISE o LOGISTIC"
+        } */
 
     },
     order: {
@@ -100,24 +100,24 @@ const taskSchema = new mongoose.Schema({
       type: String,
       enum: ["AUTO", "T.PUBLICO", null],
       default: null,
-      validate: {
+      /* validate: {
         validator: function(value) {
             // Solo valida si startWork no es null
-            return value === null || this.category === "ON PREMISE";
+            return value === null || this.category !== "REMOTE";
         },
         message: "transport solo puede ser diferente a null si category es ON PREMISE"
-    }
+        } */
     },
     tripCost: {
         type: Number,
         default: null,
-        validate: {
+        /* validate: {
             validator: function(value) {
                 // Solo valida si startWork no es null
                 return value === null || this.goTrip in ["AUTO", "T.PUBLICO"];
             },
             message: "tripCost solo puede tener un valor si tripCost no es null"
-        }
+        } */
 
     },
     state: {
