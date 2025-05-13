@@ -63,18 +63,18 @@ const Task = ({task, setMessage, setWaitingTasks, setStartedTasks}) => {
             const id= task.id
             const returnedTask = await taskService.update(id, taskObject);
             //console.log('returnedTask',returnedTask)
-            setMessage(`task successfully modified`);
+            dispatch(setMessage(`task successfully modified`))
             fetchWaitingTasksData(setWaitingTasks)
             fetchStartedTasksData(setStartedTasks)
             setTimeout(() => {
-                setMessage(null);
+                dispatch(setMessage(null))
             }, 5000);
         } catch (exception) {
-            setMessage('Error al modificar el estado de la tarea');
+            dispatch(setMessage('Error al modificar el estado de la tarea'))
             console.error(exception);
     
             setTimeout(() => {
-                setMessage(null);
+                dispatch(setMessage(null))
             }, 5000);
         }
             
@@ -87,18 +87,18 @@ const Task = ({task, setMessage, setWaitingTasks, setStartedTasks}) => {
             try {
                 const id= task.id
                 await taskService.erase(id);
-                setMessage(`task successfully deleted`);
+                dispatch(setMessage(`task successfully deleted`))
                 fetchWaitingTasksData(setWaitingTasks)
                 fetchStartedTasksData(setStartedTasks)
                 setTimeout(() => {
-                    setMessage(null);
+                    dispatch(setMessage(null))
                 }, 5000);
             } catch (exception) {
-                setMessage('Error when delete task');
+                dispatch(setMessage('Error when delete task'))
                 console.error(exception);
         
                 setTimeout(() => {
-                    setMessage(null);
+                    dispatch(setMessage(null))
                 }, 5000);
             }
         } else {

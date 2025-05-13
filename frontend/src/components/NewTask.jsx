@@ -1,10 +1,15 @@
 import {useState, useEffect} from 'react'
 import taskService from '../services/tasks'
 import { fetchClientsData, fetchWaitingTasksData } from '../utils/aux.js'
+import { setMessage } from '../reducers/messageReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
-const NewTask = ({setClientList, setMessage, setWaitingTasks, clientList}) => {
+const NewTask = ({setClientList, setWaitingTasks, clientList}) => {
     const [taskOrder, setTaskOrder] = useState('')
     const [taskClient, setTaskClient] = useState(clientList.length > 0 ? clientList[0].id : '')
+
+    const dispatch = useDispatch()
+    const user = useSelector(state => state.user)
     
     useEffect(() => {
         if (clientList.length > 0) {
@@ -27,20 +32,20 @@ const NewTask = ({setClientList, setMessage, setWaitingTasks, clientList}) => {
                 //setclientlist(clients.concat(returnedClient.name));
                 
                 //console.log('returned task',returnedTask)
-                setMessage(`new task successfully added`);
-                fetchClientsData(setClientList)
-                fetchWaitingTasksData(setWaitingTasks)
+                dispatch(setMessage(`new task successfully added`))
+                fetchClientsData(user, setClientList)
+                fetchWaitingTasksData(user, setWaitingTasks)
                 setTaskOrder('')
                 setTaskClient('')
                 setTimeout(() => {
-                    setMessage(null);
+                    dispatch(setMessage(null))
                 }, 5000);
             } catch (exception) {
-                setMessage('Error al agregar la tarea');
+                dispatch(setMessage('Error al agregar la tarea'))
                 console.error(exception);
         
                 setTimeout(() => {
-                    setMessage(null);
+                    dispatch(setMessage(null))
                 }, 5000);
             }
         }

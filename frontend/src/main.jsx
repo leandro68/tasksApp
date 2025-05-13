@@ -7,10 +7,12 @@ import { configureStore } from '@reduxjs/toolkit'
 import noteReducer from './reducers/noteReducer'
 import filterReducer from './reducers/filterReducer'
 import userReducer from './reducers/userReducer'
+import messageReducer from './reducers/messageReducer'
 
 const store = configureStore({
   reducer: {
     user: userReducer,
+    message: messageReducer,
     notes: noteReducer,
     filter: filterReducer
   }

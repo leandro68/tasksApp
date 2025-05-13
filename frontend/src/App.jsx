@@ -18,7 +18,6 @@ import NewNote from './components/NewNote.jsx'
 import VisibilityFilter from './components/VisibilityFilter' 
 
 const App = () => {
-  const [message, setMessage] = useState(null)
   const [startedTasks, setStartedTasks] = useState([])
   const [waitingTasks, setWaitingTasks] = useState([])
   const [clientList, setClientList] = useState([])
@@ -45,22 +44,22 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={message}/>
+      <Notification />
       {((user === null) || isTokenExpired(user.exp)) ?
         <div>
           <h1>Task App</h1>
           <Togglable buttonLabel='Login' >
-            <Login setMessage={setMessage}/>
+            <Login />
           </Togglable>
         </div>
         
            :
         <div>
-          <OptionsMenu setuser={setUser} setmessage={setMessage}/>
-          <Client clients={clientList} setclientlist={setClientList} setMessage={setMessage}/>
-          <NewTask clientList={clientList} setMessage={setMessage} setWaitingTasks={setWaitingTasks} setStartedTasks={setStartedTasks} user={user} setClientList={setClientList}/>
-          <StartedTaskList taskList={startedTasks} setMessage={setMessage} user={user} setWaitingTasks={setWaitingTasks} setStartedTasks={setStartedTasks} setClientList={setClientList}/>
-          <WaitingTaskList taskList={waitingTasks} setMessage={setMessage} user={user} setWaitingTasks={setWaitingTasks} setStartedTasks={setStartedTasks} setClientList={setClientList}/>
+          <OptionsMenu />
+          <Client clients={clientList} setclientlist={setClientList} />
+          <NewTask clientList={clientList} setWaitingTasks={setWaitingTasks} setStartedTasks={setStartedTasks} setClientList={setClientList}/>
+          <StartedTaskList taskList={startedTasks} setWaitingTasks={setWaitingTasks} setStartedTasks={setStartedTasks} setClientList={setClientList}/>
+          <WaitingTaskList taskList={waitingTasks} setWaitingTasks={setWaitingTasks} setStartedTasks={setStartedTasks} setClientList={setClientList}/>
         </div>
       }
       <div>

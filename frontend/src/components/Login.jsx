@@ -3,8 +3,9 @@ import loginService from '../services/login'
 import PropTypes from 'prop-types'
 import { setUser } from '../reducers/userReducer'
 import { useDispatch } from 'react-redux'
+import { setMessage } from '../reducers/messageReducer'
 
-const Login = ({setMessage}) => {
+const Login = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
@@ -25,15 +26,15 @@ const Login = ({setMessage}) => {
           setUsername('')
           setPassword('')
           
-          setMessage(`${userLogged.name} logged in`)
+          dispatch(setMessage(`${userLogged.name} logged in`))
           setTimeout(() => {
-            setMessage(null)
+            dispatch(setMessage(null))
           }, 5000)
         } catch (exception) {
-          setMessage('Wrong credentials')
+          dispatch(setMessage('Wrong credentials'))
           console.log(exception)
           setTimeout(() => {
-            setMessage(null)
+            dispatch(setMessage(null))
           }, 5000)
         }
     }
@@ -68,7 +69,6 @@ const Login = ({setMessage}) => {
 }
 
 Login.propTypes = {
-  setMessage: PropTypes.func.isRequired,
   setUsername: PropTypes.func.isRequired,
   setPassword: PropTypes.func.isRequired,
   password: PropTypes.string.isRequired,
