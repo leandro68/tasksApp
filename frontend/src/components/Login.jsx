@@ -1,7 +1,14 @@
+import {useState} from 'react'
 import loginService from '../services/login'
 import PropTypes from 'prop-types'
+import { setUser } from '../reducers/userReducer'
+import { useDispatch } from 'react-redux'
 
-const Login = ({username, password, setUsername, setPassword, setUser, setMessage}) => {
+const Login = ({setMessage}) => {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+
+    const dispatch = useDispatch()
     
     const handleLogin = async (event) => {
         event.preventDefault()
@@ -13,7 +20,8 @@ const Login = ({username, password, setUsername, setPassword, setUser, setMessag
           window.localStorage.setItem(
             'loggedTasksAppUser', JSON.stringify(userLogged)
           ) 
-          setUser(userLogged)
+          console.log('userlogged',userLogged)
+          dispatch(setUser(userLogged))
           setUsername('')
           setPassword('')
           
@@ -60,7 +68,6 @@ const Login = ({username, password, setUsername, setPassword, setUser, setMessag
 }
 
 Login.propTypes = {
-  setUser: PropTypes.func.isRequired,
   setMessage: PropTypes.func.isRequired,
   setUsername: PropTypes.func.isRequired,
   setPassword: PropTypes.func.isRequired,

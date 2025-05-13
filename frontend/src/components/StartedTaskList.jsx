@@ -1,6 +1,6 @@
 import Task from "./Task"
 
-const StartedTaskList = ({taskList, setMessage, user, setWaitingTasks, setStartedTasks, setClientList}) => {
+const StartedTaskList = ({taskList, setMessage, setWaitingTasks, setStartedTasks, setClientList}) => {
     
     return (
       <div>
@@ -11,7 +11,6 @@ const StartedTaskList = ({taskList, setMessage, user, setWaitingTasks, setStarte
               key={task.id}
               task={task} 
               setMessage={setMessage}
-              user={user} 
               setWaitingTasks={setWaitingTasks} 
               setStartedTasks={setStartedTasks} 
               setClientList={setClientList}

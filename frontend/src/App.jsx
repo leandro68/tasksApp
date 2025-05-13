@@ -10,37 +10,38 @@ import taskService from './services/tasks'
 import { fetchClientsData, fetchStartedTasksData, fetchWaitingTasksData, isTokenExpired } from './utils/aux.js'
 import Togglable from './components/Toggable'
 
-/* import Notes from './components/Notes.jsx'
+import { setUser } from './reducers/userReducer'
+import { useDispatch, useSelector } from 'react-redux'
+
+import Notes from './components/Notes.jsx'
 import NewNote from './components/NewNote.jsx'
-import VisibilityFilter from './components/VisibilityFilter' */
+import VisibilityFilter from './components/VisibilityFilter' 
 
 const App = () => {
   const [message, setMessage] = useState(null)
   const [startedTasks, setStartedTasks] = useState([])
   const [waitingTasks, setWaitingTasks] = useState([])
-  const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
-  const [user, setUser] = useState(null)
   const [clientList, setClientList] = useState([])
-  
+
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
+
   useEffect(() => {
-    fetchClientsData(user, setClientList);
-    fetchWaitingTasksData(user, setWaitingTasks);
-    fetchStartedTasksData(user, setStartedTasks);
-  }, [user])  
+    fetchClientsData(setClientList);
+    fetchWaitingTasksData(setWaitingTasks);
+    fetchStartedTasksData(setStartedTasks);
+  }, [user])   
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedTasksAppUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      dispatch(setUser(user))
       taskService.setToken(user.token)
     }
-  }, [])
+  }, []) 
 
-  /* const filterSelected = (value) => {
-    console.log(value)
-  } */
+  
 
   return (
     <div>
@@ -49,8 +50,7 @@ const App = () => {
         <div>
           <h1>Task App</h1>
           <Togglable buttonLabel='Login' >
-            <Login setUsername={setUsername} setPassword={setPassword} username={username} 
-                  password={password} setUser={setUser} setMessage={setMessage}/>
+            <Login setMessage={setMessage}/>
           </Togglable>
         </div>
         
@@ -63,14 +63,15 @@ const App = () => {
           <WaitingTaskList taskList={waitingTasks} setMessage={setMessage} user={user} setWaitingTasks={setWaitingTasks} setStartedTasks={setStartedTasks} setClientList={setClientList}/>
         </div>
       }
-      {/* <div>
+      <div>
         <NewNote />
         <VisibilityFilter />
         <Notes />
-      </div> */}
+      </div> 
     </div>
   )
 }
 
 
 export default App
+

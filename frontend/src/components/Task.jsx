@@ -11,7 +11,7 @@
 import taskService from '../services/tasks'
 import { fetchWaitingTasksData, fetchStartedTasksData } from '../utils/aux.js'
 
-const Task = ({task, setMessage, user, setWaitingTasks, setStartedTasks, setClientList}) => {
+const Task = ({task, setMessage, setWaitingTasks, setStartedTasks}) => {
 
     //console.log('Task: user:',user)
     
@@ -64,8 +64,8 @@ const Task = ({task, setMessage, user, setWaitingTasks, setStartedTasks, setClie
             const returnedTask = await taskService.update(id, taskObject);
             //console.log('returnedTask',returnedTask)
             setMessage(`task successfully modified`);
-            fetchWaitingTasksData(user, setWaitingTasks)
-            fetchStartedTasksData(user, setStartedTasks)
+            fetchWaitingTasksData(setWaitingTasks)
+            fetchStartedTasksData(setStartedTasks)
             setTimeout(() => {
                 setMessage(null);
             }, 5000);
@@ -88,8 +88,8 @@ const Task = ({task, setMessage, user, setWaitingTasks, setStartedTasks, setClie
                 const id= task.id
                 await taskService.erase(id);
                 setMessage(`task successfully deleted`);
-                fetchWaitingTasksData(user, setWaitingTasks)
-                fetchStartedTasksData(user, setStartedTasks)
+                fetchWaitingTasksData(setWaitingTasks)
+                fetchStartedTasksData(setStartedTasks)
                 setTimeout(() => {
                     setMessage(null);
                 }, 5000);

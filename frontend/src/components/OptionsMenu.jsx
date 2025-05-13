@@ -1,9 +1,14 @@
-const OptionsMenu = ({setuser, setmessage}) => {
+import { setUser } from '../reducers/userReducer'
+import { useDispatch } from 'react-redux'
+
+const OptionsMenu = ({setmessage}) => {
+
+    const dispatch = useDispatch()
     
     const handleLogout = () => {
         window.localStorage.removeItem('loggedTasksAppUser')
         setmessage('User logout successfully')
-        setuser(null)
+        dispatch(setUser(null))
         setTimeout(() => {
             setmessage(null)
         }, 5000)

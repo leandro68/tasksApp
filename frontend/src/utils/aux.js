@@ -1,5 +1,8 @@
 import taskService from '../services/tasks';
 import clientService from '../services/clients';
+import { useSelector } from 'react-redux'
+
+const user = useSelector(state => state.user)
 
 export const isTokenExpired = (exp) => {
     if (!exp) return true; // Si no hay fecha de expiración, mejor considerar que está vencido
@@ -7,7 +10,7 @@ export const isTokenExpired = (exp) => {
     return exp < currentTime;
 }
 
-export const fetchClientsData = (user, setClientList) => {
+export const fetchClientsData = (setClientList) => {
   if (user !== null && !isTokenExpired(user.exp)) {
     taskService.setToken(user.token);
 
@@ -16,7 +19,7 @@ export const fetchClientsData = (user, setClientList) => {
   }
 };
 
-export const fetchWaitingTasksData = (user, setWaitingTasks, setStartedTasks, setClientList) => {
+export const fetchWaitingTasksData = (setWaitingTasks, setStartedTasks, setClientList) => {
   if (user !== null && !isTokenExpired(user.exp)) {
     taskService.setToken(user.token);
     
@@ -24,7 +27,7 @@ export const fetchWaitingTasksData = (user, setWaitingTasks, setStartedTasks, se
   }
 };
 
-export const fetchStartedTasksData = (user, setStartedTasks) => {
+export const fetchStartedTasksData = (setStartedTasks) => {
   if (user !== null && !isTokenExpired(user.exp)) {
     taskService.setToken(user.token);
     
