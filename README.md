@@ -20,3 +20,9 @@ npm install --save-dev @testing-library/user-event
 
 redux  -  for managing the states
 npm install redux
+
+react-redux  -  to share the redux store with the components
+npm install react-redux
+
+@reduxjs/toolkit  -  to simplify the use of redux
+npm install @reduxjs/toolkit

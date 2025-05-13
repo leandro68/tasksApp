@@ -10,6 +10,9 @@ import taskService from './services/tasks'
 import { fetchClientsData, fetchStartedTasksData, fetchWaitingTasksData, isTokenExpired } from './utils/aux.js'
 import Togglable from './components/Toggable'
 
+/* import Notes from './components/Notes.jsx'
+import NewNote from './components/NewNote.jsx'
+import VisibilityFilter from './components/VisibilityFilter' */
 
 const App = () => {
   const [message, setMessage] = useState(null)
@@ -35,6 +38,10 @@ const App = () => {
     }
   }, [])
 
+  /* const filterSelected = (value) => {
+    console.log(value)
+  } */
+
   return (
     <div>
       <Notification message={message}/>
@@ -56,8 +63,14 @@ const App = () => {
           <WaitingTaskList taskList={waitingTasks} setMessage={setMessage} user={user} setWaitingTasks={setWaitingTasks} setStartedTasks={setStartedTasks} setClientList={setClientList}/>
         </div>
       }
+      {/* <div>
+        <NewNote />
+        <VisibilityFilter />
+        <Notes />
+      </div> */}
     </div>
   )
 }
+
 
 export default App

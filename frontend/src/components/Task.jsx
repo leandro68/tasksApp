@@ -106,6 +106,10 @@ const Task = ({task, setMessage, user, setWaitingTasks, setStartedTasks, setClie
         }
     }
 
+    const handleModify = () => {
+
+    }
+
 
     return (
         <div className="task">
@@ -124,7 +128,9 @@ const Task = ({task, setMessage, user, setWaitingTasks, setStartedTasks, setClie
                         <button className="outOfMenuButton" onClick={handleStart} value={'LOGISTIC'}>Start Logistic</button>
                         <button className="outOfMenuButton" onClick={handleDelete} >Delete task</button>
                    </div> :
-                   <></>     
+                   <div>
+                        <button className="outOfMenuButton" onClick={handleModify} >Modify</button>
+                   </div>     
                 } 
         </div>
         
