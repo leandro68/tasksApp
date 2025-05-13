@@ -27,9 +27,9 @@ const App = () => {
   const user = useSelector(state => state.user)
 
   useEffect(() => {
-    fetchClientsData(setClientList);
-    fetchWaitingTasksData(setWaitingTasks);
-    fetchStartedTasksData(setStartedTasks);
+    fetchClientsData(user,setClientList);
+    fetchWaitingTasksData(user,setWaitingTasks);
+    fetchStartedTasksData(user,setStartedTasks);
   }, [user])   
 
   useEffect(() => {
