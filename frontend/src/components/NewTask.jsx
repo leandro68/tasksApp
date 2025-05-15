@@ -1,21 +1,25 @@
 import {useState, useEffect} from 'react'
 import taskService from '../services/tasks'
-import { fetchClientsData, fetchWaitingTasksData } from '../utils/aux.js'
+import clientService from '../services/clients'
+//import { fetchClientsData, fetchWaitingTasksData } from '../utils/aux.js'
 import { setMessage } from '../reducers/messageReducer'
+import { setWaitingTasks } from '../reducers/waitingTasksReducer'
+import { setClients} from '../reducers/clientsReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
-const NewTask = ({setClientList, setWaitingTasks, clientList}) => {
-    const [taskOrder, setTaskOrder] = useState('')
-    const [taskClient, setTaskClient] = useState(clientList.length > 0 ? clientList[0].id : '')
-
+const NewTask = () => {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
+    const clients = useSelector(state => state.clients)
+    const [taskOrder, setTaskOrder] = useState('')
+    const [taskClient, setTaskClient] = useState(clients.length > 0 ? clients[0].id : '')
+    
     
     useEffect(() => {
-        if (clientList.length > 0) {
-            setTaskClient(clientList[0].id);
+        if (clients.length > 0) {
+            setTaskClient(clients[0].id);
         }
-    }, [clientList]);
+    }, [clients]);
 
     const handleSaveTask = async (event) => {
             event.preventDefault()
@@ -33,8 +37,12 @@ const NewTask = ({setClientList, setWaitingTasks, clientList}) => {
                 
                 //console.log('returned task',returnedTask)
                 dispatch(setMessage(`new task successfully added`))
-                fetchClientsData(user, setClientList)
-                fetchWaitingTasksData(user, setWaitingTasks)
+                clientService.setToken(user.token);
+                const clientList = await clientService.getAll()
+                dispatch(setClients(clientList))
+                taskService.setToken(user.token);
+                const wtasklist = await taskService.getByState({ state: 'WAITING' })
+                dispatch(setWaitingTasks(wtasklist));
                 setTaskOrder('')
                 setTaskClient('')
                 setTimeout(() => {
@@ -61,7 +69,7 @@ const NewTask = ({setClientList, setWaitingTasks, clientList}) => {
                            onChange={({ target }) => setTaskOrder(target.value)}/>
                     <label>cliente: </label>
                     <select value={taskClient} onChange={({ target }) => setTaskClient(target.value)}>
-                        {clientList.map((option, index) => (
+                        {clients.map((option, index) => (
                             <option key={index} value={option.id}>{option.name}</option>
                         ))}
                     </select>

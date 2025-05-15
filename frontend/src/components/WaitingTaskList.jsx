@@ -1,6 +1,11 @@
+//libraries
+import { useSelector } from 'react-redux'
+
+//components
 import Task from "./Task"
 
-const WaitingTaskList = ({taskList, setWaitingTasks, setStartedTasks, setClientList}) => {
+const WaitingTaskList = () => {
+    const taskList = useSelector(state => state.waitingTasks)
 
     return (
         <div>
@@ -10,9 +15,6 @@ const WaitingTaskList = ({taskList, setWaitingTasks, setStartedTasks, setClientL
             <Task
               key={task.id}
               task={task} 
-              setWaitingTasks={setWaitingTasks} 
-              setStartedTasks={setStartedTasks} 
-              setClientList={setClientList}
               //toggleImportance={() => toggleImportanceOf(note.id)}
             />
           )} 

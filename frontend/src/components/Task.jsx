@@ -10,10 +10,16 @@
 //import { fetchUserData, isTokenExpired } from './utils/aux.js'
 import taskService from '../services/tasks'
 import { fetchWaitingTasksData, fetchStartedTasksData } from '../utils/aux.js'
+import { useDispatch, useSelector } from 'react-redux'
+import clientService from '../services/clients'
+import { setStartedTasks } from '../reducers/startedTasksReducer'
+import { setWaitingTasks } from '../reducers/waitingTasksReducer'
+import { setMessage } from '../reducers/messageReducer'
 
-const Task = ({task, setMessage, setWaitingTasks, setStartedTasks}) => {
+const Task = ({task}) => {
 
-    //console.log('Task: user:',user)
+    const dispatch = useDispatch()
+    const user = useSelector(state => state.user)
     
     const formatDate = (date) => {
         const formattedDate = new Date(date);
@@ -64,8 +70,11 @@ const Task = ({task, setMessage, setWaitingTasks, setStartedTasks}) => {
             const returnedTask = await taskService.update(id, taskObject);
             //console.log('returnedTask',returnedTask)
             dispatch(setMessage(`task successfully modified`))
-            fetchWaitingTasksData(setWaitingTasks)
-            fetchStartedTasksData(setStartedTasks)
+            clientService.setToken(user.token);
+            clientService.getAll().then(clients => dispatch(setClients(clients)));
+            taskService.setToken(user.token);
+            taskService.getByState({ state: 'STARTED' }).then(tasks => dispatch(setStartedTasks(tasks)));
+            taskService.getByState({ state: 'WAITING' }).then(tasks => dispatch(setWaitingTasks(tasks)));
             setTimeout(() => {
                 dispatch(setMessage(null))
             }, 5000);
@@ -88,8 +97,11 @@ const Task = ({task, setMessage, setWaitingTasks, setStartedTasks}) => {
                 const id= task.id
                 await taskService.erase(id);
                 dispatch(setMessage(`task successfully deleted`))
-                fetchWaitingTasksData(setWaitingTasks)
-                fetchStartedTasksData(setStartedTasks)
+                clientService.setToken(user.token);
+                clientService.getAll().then(clients => dispatch(setClients(clients)));
+                taskService.setToken(user.token);
+                taskService.getByState({ state: 'STARTED' }).then(tasks => dispatch(setStartedTasks(tasks)));
+                taskService.getByState({ state: 'WAITING' }).then(tasks => dispatch(setWaitingTasks(tasks)));
                 setTimeout(() => {
                     dispatch(setMessage(null))
                 }, 5000);

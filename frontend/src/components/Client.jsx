@@ -1,13 +1,15 @@
 import {useState} from 'react'
 import clientService from '../services/clients'
 import { setMessage } from '../reducers/messageReducer'
-import { useDispatch } from 'react-redux'
+import { setClients} from '../reducers/clientsReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
-const Client = ({clients, setclientlist}) => {
+const Client = () => {
     const [clientName, setClientName] = useState('')
     const [subscriber, setSubscriber] = useState('')
 
     const dispatch = useDispatch()
+    const user = useSelector(state => state.user )
     
     const handleSubscriber = (event) => {
         setSubscriber(event.target.value);
@@ -21,17 +23,21 @@ const Client = ({clients, setclientlist}) => {
               name: clientName,
               subscriber: subscriber,
         }
-        //console.log('clientObject:',clientObject)
+        console.log('clientObject:',clientObject)
                  
-        try {
-            const returnedClient = await clientService.create(clientObject);
-            setclientlist(clients.concat(returnedClient.name));
-            setClientName('');
-            dispatch(setMessage(`${returnedClient.name} added`))
+        try { 
+                clientService.setToken(user.token);
+                const returnedClient = await clientService.create(clientObject);
+                const clients = await clientService.getAll()
+                dispatch(setClients(clients))
+                setClientName('');
+                dispatch(setMessage(`${returnedClient.name} added`))
     
-            setTimeout(() => {
-                dispatch(setMessage(null))
-            }, 5000);
+                setTimeout(() => {
+                    dispatch(setMessage(null))
+                }, 5000);
+            
+            
         } catch (exception) {
             dispatch(setMessage('Error al agregar el cliente'))
             console.error(exception);
