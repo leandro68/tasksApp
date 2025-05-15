@@ -15,7 +15,7 @@ const getAll = async () => {
   return response.data
 }
 
-const getByState = async ({state}) => {
+const getByState = async (state) => {
   const config = {
     headers: { Authorization: token },
   }
@@ -24,7 +24,7 @@ const getByState = async ({state}) => {
   return response.data
 }
 
-const create = async newObject => {
+const create = async (newObject) => {
   const config = {
     headers: { Authorization: token },
   }

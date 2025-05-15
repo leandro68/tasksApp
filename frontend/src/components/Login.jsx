@@ -1,35 +1,23 @@
 import {useState} from 'react'
-import loginService from '../services/login'
 import PropTypes from 'prop-types'
-import { setUser } from '../reducers/userReducer'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setMessage } from '../reducers/messageReducer'
+import { initializeUser } from '../reducers/userReducer'
 
 const Login = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-
+  
     const dispatch = useDispatch()
-    
+    const user = useSelector(state => state.user)
+
     const handleLogin = async (event) => {
         event.preventDefault()
         
         try {
-          const userLogged = await loginService.login({
-            username, password,
-          })
-          window.localStorage.setItem(
-            'loggedTasksAppUser', JSON.stringify(userLogged)
-          ) 
-          console.log('userlogged',userLogged)
-          dispatch(setUser(userLogged))
+          await dispatch(initializeUser({username, password}))
           setUsername('')
           setPassword('')
-          
-          dispatch(setMessage(`${userLogged.name} logged in`))
-          setTimeout(() => {
-            dispatch(setMessage(null))
-          }, 5000)
         } catch (exception) {
           dispatch(setMessage('Wrong credentials'))
           console.log(exception)

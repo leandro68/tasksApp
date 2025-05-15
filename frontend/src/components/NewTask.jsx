@@ -1,10 +1,7 @@
 import {useState, useEffect} from 'react'
-import taskService from '../services/tasks'
-import clientService from '../services/clients'
-//import { fetchClientsData, fetchWaitingTasksData } from '../utils/aux.js'
 import { setMessage } from '../reducers/messageReducer'
-import { setWaitingTasks } from '../reducers/waitingTasksReducer'
-import { setClients} from '../reducers/clientsReducer'
+import { initializeTasks, appendTask } from '../reducers/tasksReducer'
+import { initializeClients } from '../reducers/clientsReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const NewTask = () => {
@@ -32,22 +29,11 @@ const NewTask = () => {
             console.log('taskObject:',taskObject)
                      
             try {
-                const returnedTask = await taskService.create(taskObject);
-                //setclientlist(clients.concat(returnedClient.name));
-                
-                //console.log('returned task',returnedTask)
-                dispatch(setMessage(`new task successfully added`))
-                clientService.setToken(user.token);
-                const clientList = await clientService.getAll()
-                dispatch(setClients(clientList))
-                taskService.setToken(user.token);
-                const wtasklist = await taskService.getByState({ state: 'WAITING' })
-                dispatch(setWaitingTasks(wtasklist));
+                await dispatch(appendTask(user, taskObject))
+                await dispatch(initializeClients(user))
+                await dispatch(initializeTasks(user, 'WAITING'))
                 setTaskOrder('')
                 setTaskClient('')
-                setTimeout(() => {
-                    dispatch(setMessage(null))
-                }, 5000);
             } catch (exception) {
                 dispatch(setMessage('Error al agregar la tarea'))
                 console.error(exception);

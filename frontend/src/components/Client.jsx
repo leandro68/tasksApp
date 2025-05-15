@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import clientService from '../services/clients'
 import { setMessage } from '../reducers/messageReducer'
-import { setClients} from '../reducers/clientsReducer'
+import { appendClient, setClients} from '../reducers/clientsReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const Client = () => {
@@ -26,18 +26,8 @@ const Client = () => {
         console.log('clientObject:',clientObject)
                  
         try { 
-                clientService.setToken(user.token);
-                const returnedClient = await clientService.create(clientObject);
-                const clients = await clientService.getAll()
-                dispatch(setClients(clients))
-                setClientName('');
-                dispatch(setMessage(`${returnedClient.name} added`))
-    
-                setTimeout(() => {
-                    dispatch(setMessage(null))
-                }, 5000);
-            
-            
+            dispatch(appendClient(user, clientObject))
+            setClientName('')
         } catch (exception) {
             dispatch(setMessage('Error al agregar el cliente'))
             console.error(exception);

@@ -5,7 +5,6 @@ import { isTokenExpired } from '../utils/aux.js'
 import Login from '../components/Login'
 import StartedTaskList from '../components/StartedTaskList'
 import Togglable from '../components/Toggable'
-import {useState, useEffect} from 'react'
 
 const Home = () => {
     const user = useSelector(state => state.user)

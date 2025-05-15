@@ -1,27 +1,18 @@
-import {useState, useEffect} from 'react'
-import StartedTaskList from './components/StartedTaskList'
+import {useEffect} from 'react'
 import WaitingTaskList from './components/WaitingTaskList'
 import NewTask from './components/NewTask'
 import Notification from './components/Notification'
 import Client from './components/Client'
-import Login from './components/Login'
 import Home from './components/Home.jsx'
-import OptionsMenu from './components/OptionsMenu'
 import taskService from './services/tasks'
-import clientService from './services/clients'
-import { fetchClientsData, fetchStartedTasksData, fetchWaitingTasksData, isTokenExpired } from './utils/aux.js'
-import Togglable from './components/Toggable'
+import { isTokenExpired } from './utils/aux.js'
 
 import { setUser } from './reducers/userReducer'
-import { setClients } from './reducers/clientsReducer'
-import { setStartedTasks } from './reducers/startedTasksReducer'
-import { setWaitingTasks } from './reducers/waitingTasksReducer'
+import { initializeClients } from './reducers/clientsReducer'
+import { initializeTasks } from './reducers/tasksReducer'
 
 import { useDispatch, useSelector } from 'react-redux'
 
-import Notes from './components/Notes.jsx'
-import NewNote from './components/NewNote.jsx'
-import VisibilityFilter from './components/VisibilityFilter' 
 
 const App = () => {
   const dispatch = useDispatch()
@@ -32,11 +23,9 @@ const App = () => {
     
     if (user !== null && !isTokenExpired(user.exp)) {
       console.log('pasada user:',user)
-      clientService.setToken(user.token);
-      clientService.getAll().then(clients => dispatch(setClients(clients)));
-      taskService.setToken(user.token);
-      taskService.getByState({ state: 'STARTED' }).then(tasks => dispatch(setStartedTasks(tasks)));
-      taskService.getByState({ state: 'WAITING' }).then(tasks => dispatch(setWaitingTasks(tasks)));
+      dispatch(initializeClients(user))
+      dispatch(initializeTasks(user,'STARTED'))
+      dispatch(initializeTasks(user,'WAITING'))
     }
     
   }, [user])   
@@ -46,7 +35,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       dispatch(setUser(user))
-      taskService.setToken(user.token)
+      //taskService.setToken(user.token)
     }
   }, []) 
 
@@ -59,11 +48,6 @@ const App = () => {
       <Client />
       <NewTask />
       <WaitingTaskList />
-      {/* <div>
-        <NewNote />
-        <VisibilityFilter />
-        <Notes />
-      </div>  */}
     </div>
   )
 }

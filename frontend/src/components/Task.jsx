@@ -9,12 +9,13 @@
  */
 //import { fetchUserData, isTokenExpired } from './utils/aux.js'
 import taskService from '../services/tasks'
-import { fetchWaitingTasksData, fetchStartedTasksData } from '../utils/aux.js'
 import { useDispatch, useSelector } from 'react-redux'
-import clientService from '../services/clients'
-import { setStartedTasks } from '../reducers/startedTasksReducer'
-import { setWaitingTasks } from '../reducers/waitingTasksReducer'
+import { setStartedTasks, setWaitingTasks } from '../reducers/tasksReducer';
+
+
+import { updateTask, deleteTask } from '../reducers/tasksReducer'
 import { setMessage } from '../reducers/messageReducer'
+import { initializeTasks } from '../reducers/tasksReducer'
 
 const Task = ({task}) => {
 
@@ -67,17 +68,11 @@ const Task = ({task}) => {
         
         try {
             const id= task.id
-            const returnedTask = await taskService.update(id, taskObject);
+            await dispatch(updateTask(user, id, taskObject))
             //console.log('returnedTask',returnedTask)
-            dispatch(setMessage(`task successfully modified`))
-            clientService.setToken(user.token);
-            clientService.getAll().then(clients => dispatch(setClients(clients)));
-            taskService.setToken(user.token);
-            taskService.getByState({ state: 'STARTED' }).then(tasks => dispatch(setStartedTasks(tasks)));
-            taskService.getByState({ state: 'WAITING' }).then(tasks => dispatch(setWaitingTasks(tasks)));
-            setTimeout(() => {
-                dispatch(setMessage(null))
-            }, 5000);
+            //dispatch(initializeClients(user))
+            await dispatch(initializeTasks(user, 'STARTED'))
+            await dispatch(initializeTasks(user, 'WAITING'))
         } catch (exception) {
             dispatch(setMessage('Error al modificar el estado de la tarea'))
             console.error(exception);
@@ -95,16 +90,10 @@ const Task = ({task}) => {
             //console.log("Elemento borrado.");
             try {
                 const id= task.id
-                await taskService.erase(id);
-                dispatch(setMessage(`task successfully deleted`))
-                clientService.setToken(user.token);
-                clientService.getAll().then(clients => dispatch(setClients(clients)));
-                taskService.setToken(user.token);
-                taskService.getByState({ state: 'STARTED' }).then(tasks => dispatch(setStartedTasks(tasks)));
-                taskService.getByState({ state: 'WAITING' }).then(tasks => dispatch(setWaitingTasks(tasks)));
-                setTimeout(() => {
-                    dispatch(setMessage(null))
-                }, 5000);
+                await dispatch(deleteTask(user, id))
+                //dispatch(initializeClients(user))
+                await dispatch(initializeTasks(user, 'STARTED'))
+                await dispatch(initializeTasks(user, 'WAITING'))
             } catch (exception) {
                 dispatch(setMessage('Error when delete task'))
                 console.error(exception);
