@@ -22,8 +22,19 @@ const startedTasksSlice = createSlice({
   }
 });
 
+const selectedTaskSlice = createSlice({
+  name: 'selectedTask',
+  initialState: null,
+  reducers: {
+    setSelectedTask(state, action) {
+      return action.payload;
+    }
+  }
+});
+
 export const { setWaitingTasks } = waitingTasksSlice.actions;
 export const { setStartedTasks } = startedTasksSlice.actions;
+export const { setSelectedTask } = selectedTaskSlice.actions;
 
 export const appendTask = (user, taskObject) => {
   return async dispatch => {
@@ -75,3 +86,4 @@ export const updateTask = (user, id, taskObject) => {
 
 export const waitingTasksReducer = waitingTasksSlice.reducer;
 export const startedTasksReducer = startedTasksSlice.reducer;
+export const selectedTaskReducer = selectedTaskSlice.reducer;

@@ -2,22 +2,27 @@
 import { useSelector } from 'react-redux'
 import { isTokenExpired } from '../utils/aux.js'
 //components
-import Login from '../components/Login'
 import StartedTaskList from '../components/StartedTaskList'
-import Togglable from '../components/Toggable'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { initializeClients } from '../reducers/clientsReducer'
+import { initializeTasks } from '../reducers/tasksReducer'
 
 const Home = () => {
     const user = useSelector(state => state.user)
-    
+    const dispatch = useDispatch()
+    useEffect(() => {
+    if (user !== null && !isTokenExpired(user.exp)) {
+        dispatch(initializeClients(user))
+        dispatch(initializeTasks(user,'STARTED'))
+        dispatch(initializeTasks(user,'WAITING'))
+    }
+    }, []) 
+
     return (
         <>
             {((user === null) || isTokenExpired(user.exp)) ?
-                <div>{/* <div>
-                <h1>Task App</h1>
-                <Togglable buttonLabel='Login' >
-                    <Login />
-                </Togglable>
-                </div> */}
+                <div>
                 </div>
                 :
                 <div>            
