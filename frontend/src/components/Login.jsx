@@ -3,11 +3,12 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { setMessage } from '../reducers/messageReducer'
 import { initializeUser } from '../reducers/userReducer'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-  
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
 
@@ -18,6 +19,7 @@ const Login = () => {
           await dispatch(initializeUser({username, password}))
           setUsername('')
           setPassword('')
+          navigate('/')
         } catch (exception) {
           dispatch(setMessage('Wrong credentials'))
           console.log(exception)

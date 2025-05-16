@@ -11,6 +11,7 @@
 import taskService from '../services/tasks'
 import { useDispatch, useSelector } from 'react-redux'
 import { setStartedTasks, setWaitingTasks } from '../reducers/tasksReducer';
+import { Link } from 'react-router-dom'
 
 
 import { updateTask, deleteTask } from '../reducers/tasksReducer'
@@ -107,32 +108,25 @@ const Task = ({task}) => {
         }
     }
 
-    const handleModify = () => {
-
-    }
-
 
     return (
         <div className="task">
             <hr/>
             <div>
-                {formatDate(task.inputDate)} - {task.client.name}
-            </div>
-            <div>
-                {task.order}
-            </div>
-            
-                { (task.state === 'WAITING') ?
-                   <div>
-                        <button className="outOfMenuButton" onClick={handleStart} value={'REMOTE'}>Start Remote</button>
-                        <button className="outOfMenuButton" onClick={handleStart} value={'ON PREMISE'}>Start On Premise</button>
-                        <button className="outOfMenuButton" onClick={handleStart} value={'LOGISTIC'}>Start Logistic</button>
-                        <button className="outOfMenuButton" onClick={handleDelete} >Delete task</button>
-                   </div> :
-                   <div>
-                        <button className="outOfMenuButton" onClick={handleModify} >Modify</button>
-                   </div>     
-                } 
+                {formatDate(task.inputDate)} - {task.client.name} - {task.id} - {task.category} - {task.state}
+            </div>            
+            { (task.state === 'WAITING') ?
+                <div>
+                    <div>{task.order}</div>
+                    <button className="outOfMenuButton" onClick={handleStart} value={'REMOTE'}>Start Remote</button>
+                    <button className="outOfMenuButton" onClick={handleStart} value={'ON PREMISE'}>Start On Premise</button>
+                    <button className="outOfMenuButton" onClick={handleStart} value={'LOGISTIC'}>Start Logistic</button>
+                    <button className="outOfMenuButton" onClick={handleDelete} >Delete task</button>
+                </div> :
+                <div>
+                    <Link to={`/tasks/${task.id}`}>{task.order}</Link>
+                </div>     
+            } 
         </div>
         
     )

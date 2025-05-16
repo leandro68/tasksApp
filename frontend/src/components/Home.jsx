@@ -12,13 +12,13 @@ const Home = () => {
     return (
         <>
             {((user === null) || isTokenExpired(user.exp)) ?
-                <div>
+                <div>{/* <div>
                 <h1>Task App</h1>
                 <Togglable buttonLabel='Login' >
                     <Login />
                 </Togglable>
+                </div> */}
                 </div>
-                
                 :
                 <div>            
                     <StartedTaskList />
