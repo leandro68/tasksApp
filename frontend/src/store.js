@@ -4,7 +4,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './reducers/userReducer'
 import messageReducer from './reducers/messageReducer'
 import clientsReducer from './reducers/clientsReducer'
-import { startedTasksReducer, waitingTasksReducer } from './reducers/tasksReducer'
+import { startedTasksReducer, waitingTasksReducer, selectedTaskReducer } from './reducers/tasksReducer'
 
 const store = configureStore({
   reducer: {
@@ -12,7 +12,8 @@ const store = configureStore({
     message: messageReducer,
     clients: clientsReducer,
     startedTasks: startedTasksReducer,
-    waitingTasks: waitingTasksReducer
+    waitingTasks: waitingTasksReducer,
+    selectedTask: selectedTaskReducer
   }
 })
 

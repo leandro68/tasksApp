@@ -27,7 +27,7 @@ const App = () => {
     padding: 5
   }
 
-  useEffect(() => {
+  /* useEffect(() => {
     
     if (user !== null && !isTokenExpired(user.exp)) {
       dispatch(initializeClients(user))
@@ -35,7 +35,7 @@ const App = () => {
       dispatch(initializeTasks(user,'WAITING'))
     }
     
-  }, [user])   
+  }, [user])    */
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedTasksAppUser')
@@ -74,7 +74,7 @@ const App = () => {
         <Route path="/clients" element={<Client />} />
         <Route path="/newtask" element={<NewTask />} />
         <Route path="/waitingtasks" element={<WaitingTaskList />} />
-        <Route path="/tasks/:id" element={<TaskDetails task={task} />} />
+        <Route path="/tasks/:id" element={<TaskDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
       </Routes>

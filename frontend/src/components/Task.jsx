@@ -10,7 +10,7 @@
 //import { fetchUserData, isTokenExpired } from './utils/aux.js'
 import taskService from '../services/tasks'
 import { useDispatch, useSelector } from 'react-redux'
-import { setStartedTasks, setWaitingTasks } from '../reducers/tasksReducer';
+import { setSelectedTask } from '../reducers/tasksReducer';
 import { Link } from 'react-router-dom'
 
 
@@ -56,6 +56,7 @@ const Task = ({task}) => {
                     taskObject.category = 'ON PREMISE'
                     taskObject.startWork = task.startWork
                     taskObject.goTrip = Date.now()
+                    taskObject.transport = "AUTO"
                     break
                 }
             case 'LOGISTIC':
@@ -63,6 +64,7 @@ const Task = ({task}) => {
                     taskObject.category = 'LOGISTIC'
                     taskObject.startWork = task.startWork
                     taskObject.goTrip = Date.now()
+                    taskObject.transport = "AUTO"
                     break
                 } 
         }
@@ -124,7 +126,7 @@ const Task = ({task}) => {
                     <button className="outOfMenuButton" onClick={handleDelete} >Delete task</button>
                 </div> :
                 <div>
-                    <Link to={`/tasks/${task.id}`}>{task.order}</Link>
+                    <Link to={`/tasks/${task.id}`} onClick={() => dispatch(setSelectedTask(task))}>{task.order}</Link>
                 </div>     
             } 
         </div>

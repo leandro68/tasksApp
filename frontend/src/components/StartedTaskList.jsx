@@ -15,7 +15,6 @@ const StartedTaskList = () => {
             <Task
               key={task.id}
               task={task}
-              //toggleImportance={() => toggleImportanceOf(note.id)}
             />
           )} 
         </ul>
