@@ -1,4 +1,6 @@
 //libraries
+
+
 import { useSelector } from 'react-redux'
 
 //components
@@ -10,17 +12,20 @@ const StartedTaskList = () => {
     return (
       <div>
         <h2>Started Tasks</h2>
-        <ul>
-          {taskList.map((task) => 
-            <Task
-              key={task.id}
-              task={task}
-            />
-          )} 
-        </ul>
+        {taskList.length === 0 ? (
+          <p>NO HAY TAREAS COMENZADAS</p>
+        ) : (
+          <ul>
+            {taskList.map((task) => 
+              <Task
+                key={task.id}
+                task={task}
+              />
+            )} 
+          </ul>
+        )}
         <hr/>
       </div>
-        
     )
 }
 

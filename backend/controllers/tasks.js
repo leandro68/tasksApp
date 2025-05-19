@@ -29,8 +29,6 @@ tasksRouter.post('/', async (request, response) => {
     backTrip: body.backTrip,
     order: body.order, 
     report: body.report,
-    transport: body.transport,
-    tripCost: body.tripCost,
     state: body.state
   })  
 
@@ -61,8 +59,6 @@ tasksRouter.put('/:id', async (request, response) => {
     backTrip: body.backTrip,
     order: body.order, 
     report: body.report,
-    transport: body.transport,
-    tripCost: body.tripCost,
     state: body.state
   }
 

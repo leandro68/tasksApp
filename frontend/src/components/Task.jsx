@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setSelectedTask } from '../reducers/tasksReducer';
 import { Link } from 'react-router-dom'
 
-
+import {useNavigate} from 'react-router-dom'
 import { updateTask, deleteTask } from '../reducers/tasksReducer'
 import { setMessage } from '../reducers/messageReducer'
 import { initializeTasks } from '../reducers/tasksReducer'
@@ -22,6 +22,7 @@ const Task = ({task}) => {
 
     const dispatch = useDispatch()
     const user = useSelector(state => state.user)
+    const navigate = useNavigate()
     
     const formatDate = (date) => {
         const formattedDate = new Date(date);
@@ -39,8 +40,6 @@ const Task = ({task}) => {
             backTrip: task.backTrip,
             order: task.order, 
             report: task.report,
-            transport: task.transport,
-            tripCost: task.tripCost,
             state: 'STARTED'
         }
         switch (event.target.value){
@@ -56,7 +55,6 @@ const Task = ({task}) => {
                     taskObject.category = 'ON PREMISE'
                     taskObject.startWork = task.startWork
                     taskObject.goTrip = Date.now()
-                    taskObject.transport = "AUTO"
                     break
                 }
             case 'LOGISTIC':
@@ -64,7 +62,6 @@ const Task = ({task}) => {
                     taskObject.category = 'LOGISTIC'
                     taskObject.startWork = task.startWork
                     taskObject.goTrip = Date.now()
-                    taskObject.transport = "AUTO"
                     break
                 } 
         }
@@ -76,6 +73,7 @@ const Task = ({task}) => {
             //dispatch(initializeClients(user))
             await dispatch(initializeTasks(user, 'STARTED'))
             await dispatch(initializeTasks(user, 'WAITING'))
+            navigate('/') // Redirigir al usuario a home después de actualizar la tarea
         } catch (exception) {
             dispatch(setMessage('Error al modificar el estado de la tarea'))
             console.error(exception);

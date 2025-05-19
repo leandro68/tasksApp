@@ -7,12 +7,8 @@ import Home from './components/Home.jsx'
 import Login from './components/Login.jsx'
 import Logout from './components/Logout.jsx'
 import TaskDetails from './components/TaskDetails'
-import taskService from './services/tasks'
-import { isTokenExpired } from './utils/aux.js'
 
 import { setUser } from './reducers/userReducer'
-import { initializeClients } from './reducers/clientsReducer'
-import { initializeTasks } from './reducers/tasksReducer'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { Routes, Route, Link, useMatch} from 'react-router-dom'

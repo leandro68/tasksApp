@@ -71,3 +71,12 @@ h2 {
   background-color: #02694a;
   transform: scale(0.95);
 }
+
+/*-------------------------------------------*/
+
+.textarea-container {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  margin-top: 20px;
+}

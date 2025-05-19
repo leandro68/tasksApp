@@ -96,37 +96,13 @@ const taskSchema = new mongoose.Schema({
         type: String,
         default: null
     },
-    transport: {
-      type: String,
-      enum: ["AUTO", "T.PUBLICO", null],
-      default: null,
-      /* validate: {
-        validator: function(value) {
-            // Solo valida si startWork no es null
-            return value === null || this.category !== "REMOTE";
-        },
-        message: "transport solo puede ser diferente a null si category es ON PREMISE"
-        } */
-    },
-    tripCost: {
-        type: Number,
-        default: null,
-        /* validate: {
-            validator: function(value) {
-                // Solo valida si startWork no es null
-                return value === null || this.goTrip in ["AUTO", "T.PUBLICO"];
-            },
-            message: "tripCost solo puede tener un valor si tripCost no es null"
-        } */
-
-    },
     state: {
         type: String,
         default: 'WAITING',
         enum: ['WAITING','STARTED','FINISHED']
     }
     })
-
+    
 taskSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
